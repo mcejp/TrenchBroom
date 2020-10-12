@@ -421,8 +421,14 @@ namespace TrenchBroom {
                     [](Model::LayerNode*) {
                         return kdl::result<void, Model::TransformError>::success();
                     },
-                    [&](Model::GroupNode* group) {
-                        return group->transform(m_worldBounds, transform, lockTextures);
+                    [&](auto&& thisLambda, Model::GroupNode* group) {
+                        for (auto* child : group->children()) {
+                            auto result = child->accept(thisLambda);
+                            if (!result.is_success()) {
+                                return result;
+                            }
+                        }
+                        return kdl::result<void, Model::TransformError>::success();
                     },
                     [&](auto&& thisLambda, Model::EntityNode* entity) {
                         if (entity->hasChildren()) {
