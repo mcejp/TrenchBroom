@@ -242,29 +242,12 @@ namespace TrenchBroom {
             return findContainingGroup(this);
         }
 
-        kdl::result<void, TransformError> EntityNode::doTransform(const vm::bbox3& worldBounds, const vm::mat4x4& transformation, bool lockTextures) {
-            if (hasChildren()) {
-                const NotifyNodeChange nodeChange(this);
+        kdl::result<void, TransformError> EntityNode::doTransform(const vm::bbox3&, const vm::mat4x4& transformation, const bool) {
+            assert(!hasChildren());
 
-                for (auto* child : children()) {
-                    const auto result = child->accept(kdl::overload(
-                        [] (WorldNode*)  { return kdl::result<void, TransformError>::success(); },
-                        [] (LayerNode*)  { return kdl::result<void, TransformError>::success(); },
-                        [] (GroupNode*)  { return kdl::result<void, TransformError>::success(); },
-                        [] (EntityNode*) { return kdl::result<void, TransformError>::success(); },
-                        [&](BrushNode* brush) {
-                            return brush->transform(worldBounds, transformation, lockTextures);
-                        }
-                    ));
-                    if (!result.is_success()) {
-                        return result;
-                    }
-                }
-            } else {
-                auto entity = m_entity;
-                entity.transform(transformation);
-                setEntity(std::move(entity));
-            }
+            auto entity = m_entity;
+            entity.transform(transformation);
+            setEntity(std::move(entity));
 
             return kdl::result<void, TransformError>::success();
         }

@@ -424,8 +424,18 @@ namespace TrenchBroom {
                     [&](Model::GroupNode* group) {
                         return group->transform(m_worldBounds, transform, lockTextures);
                     },
-                    [&](Model::EntityNode* entity) {
-                        return entity->transform(m_worldBounds, transform, lockTextures);
+                    [&](auto&& thisLambda, Model::EntityNode* entity) {
+                        if (entity->hasChildren()) {
+                            for (auto* child : entity->children()) {
+                                auto result = child->accept(thisLambda);
+                                if (!result.is_success()) {
+                                    return result;
+                                }
+                            }
+                            return kdl::result<void, Model::TransformError>::success();
+                        } else {
+                            return entity->transform(m_worldBounds, transform, lockTextures);
+                        }
                     },
                     [&](Model::BrushNode* brush) {
                         return brush->transform(m_worldBounds, transform, lockTextures);
