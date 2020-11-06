@@ -227,10 +227,6 @@ namespace TrenchBroom {
             return findContainingGroup(this);
         }
 
-        kdl::result<void, TransformError> GroupNode::doTransform(const vm::bbox3&, const vm::mat4x4&, const bool) {
-            return kdl::result<void, TransformError>::success();
-        }
-
         bool GroupNode::doContains(const Node* node) const {
             return boundsContainNode(logicalBounds(), node);
         }

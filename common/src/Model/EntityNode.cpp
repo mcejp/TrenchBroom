@@ -242,16 +242,6 @@ namespace TrenchBroom {
             return findContainingGroup(this);
         }
 
-        kdl::result<void, TransformError> EntityNode::doTransform(const vm::bbox3&, const vm::mat4x4& transformation, const bool) {
-            assert(!hasChildren());
-
-            auto entity = m_entity;
-            entity.transform(transformation);
-            setEntity(std::move(entity));
-
-            return kdl::result<void, TransformError>::success();
-        }
-
         bool EntityNode::doContains(const Node* node) const {
             return boundsContainNode(logicalBounds(), node);
         }
