@@ -46,7 +46,9 @@ namespace TrenchBroom {
         }
 
         void GroupNode::setName(const std::string& name) {
-            addOrUpdateAttribute(AttributeNames::GroupName, name);
+            auto entity = m_entity;
+            entity.addOrUpdateAttribute(AttributeNames::GroupName, name);
+            setEntity(std::move(entity));
         }
 
         bool GroupNode::opened() const {
@@ -96,7 +98,9 @@ namespace TrenchBroom {
         }
 
         const std::string& GroupNode::doGetName() const {
-            return attribute(AttributeNames::GroupName);
+            static const auto NoName = std::string("");
+            const auto* value = entity().attribute(AttributeNames::GroupName);
+            return value ? *value : NoName;
         }
 
         const vm::bbox3& GroupNode::doGetLogicalBounds() const {
@@ -201,14 +205,6 @@ namespace TrenchBroom {
         }
 
         void GroupNode::doAttributesDidChange(const vm::bbox3& /* oldBounds */) {
-        }
-
-        bool GroupNode::doIsAttributeNameMutable(const std::string& /* name */) const {
-            return false;
-        }
-
-        bool GroupNode::doIsAttributeValueMutable(const std::string& /* name */) const {
-            return false;
         }
 
         vm::vec3 GroupNode::doGetLinkSourceAnchor() const {

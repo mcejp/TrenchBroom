@@ -525,7 +525,7 @@ namespace TrenchBroom {
         TEST_CASE("NodeTest.accept", "[NodeTest]") {
             const auto worldBounds = vm::bbox3(8192.0);
 
-            WorldNode world(MapFormat::Standard);
+            WorldNode world(Entity(), MapFormat::Standard);
             LayerNode layer("name");
             GroupNode group("name");
             EntityNode entity;
@@ -557,13 +557,13 @@ namespace TrenchBroom {
         }
 
         TEST_CASE("NodeTest.acceptAndVisitChildren", "[NodeTest]") {
-            WorldNode world(MapFormat::Standard);
+            WorldNode world(Entity(), MapFormat::Standard);
             auto* layer = world.defaultLayer();
 
-            auto* entity1 = world.createEntity();
-            auto* entity2 = world.createEntity();
+            auto* entity1 = world.createEntity(Entity());
+            auto* entity2 = world.createEntity(Entity());
             auto* group = world.createGroup("name");
-            auto* groupEntity = world.createEntity();
+            auto* groupEntity = world.createEntity(Entity());
 
             layer->addChild(entity1);
             layer->addChild(entity2);
@@ -588,7 +588,7 @@ namespace TrenchBroom {
         }
 
         TEST_CASE("NodeTest.visitParent", "[NodeTest]") {
-            WorldNode world(MapFormat::Standard);
+            WorldNode world(Entity(), MapFormat::Standard);
             auto* layer = world.defaultLayer();
 
             CHECK(world.visitParent(nodeTestVisitor) == std::nullopt);
@@ -612,7 +612,7 @@ namespace TrenchBroom {
         }
 
         TEST_CASE("NodeTest.visitAll", "[NodeTest]") {
-            WorldNode world(MapFormat::Standard);
+            WorldNode world(Entity(), MapFormat::Standard);
             LayerNode layer("name");
             GroupNode group("name");
             EntityNode entity;
@@ -625,11 +625,11 @@ namespace TrenchBroom {
         }
 
         TEST_CASE("NodeTest.visitChildren", "[NodeTest]") {
-            WorldNode world(MapFormat::Standard);
+            WorldNode world(Entity(), MapFormat::Standard);
             auto* layer = world.defaultLayer();
             
-            auto* entity1 = world.createEntity();
-            auto* entity2 = world.createEntity();
+            auto* entity1 = world.createEntity(Entity());
+            auto* entity2 = world.createEntity(Entity());
             layer->addChild(entity1);
             layer->addChild(entity2);
 
