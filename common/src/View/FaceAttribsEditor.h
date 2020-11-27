@@ -32,6 +32,7 @@ class QGridLayout;
 namespace TrenchBroom {
     namespace Model {
         class BrushFaceHandle;
+        class Node;
     }
 
     namespace View {
@@ -90,6 +91,7 @@ namespace TrenchBroom {
 
             void documentWasNewed(MapDocument* document);
             void documentWasLoaded(MapDocument* document);
+            void nodesDidChange(const std::vector<Model::Node*>& nodes);
             void brushFacesDidChange(const std::vector<Model::BrushFaceHandle>& faces);
             void selectionDidChange(const Selection& selection);
             void textureCollectionsDidChange();
